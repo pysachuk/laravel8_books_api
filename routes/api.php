@@ -14,10 +14,31 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return response() -> json($request->user());
+//Authorization
+Route::post('/register', [\App\Http\Controllers\Api\Auth\AuthController::class, 'register'])
+->name('api.register');
+Route::post('/login', [\App\Http\Controllers\Api\Auth\AuthController::class, 'login'])
+->name('api.login');
+
+//Not auth routes
+Route::get('/authors', [\App\Http\Controllers\Api\AuthorController::class, 'authors'])
+->name('api.authors');
+Route::get('/books', [\App\Http\Controllers\Api\BookController::class, 'all'])
+    ->name('api.books');
+Route::get('/books/author/{author_id}', [\App\Http\Controllers\Api\AuthorController::class, 'authorBooks'])
+    ->name('api.author_books');
+
+//Auth routes
+Route::middleware('auth:sanctum') -> group(function(){
+    Route::post('/logout', [\App\Http\Controllers\Api\Auth\AuthController::class, 'logout'])
+    ->name('api.logout');
+    Route::get('/books/my', [\App\Http\Controllers\Api\BookController::class, 'myBooks'])
+        ->name('api.my_books');
+    Route::post('/books/create', [\App\Http\Controllers\Api\BookController::class, 'create'])
+        ->name('api.create_book');
+    Route::patch('/books/update/{book}', [\App\Http\Controllers\Api\BookController::class, 'update'])
+        ->name('api.update_book');
+    Route::delete('/books/delete/{book}', [\App\Http\Controllers\Api\BookController::class, 'delete'])
+        ->name('api.delete_book');
 });
 
-Route::post('/register', [\App\Http\Controllers\Api\Auth\AuthController::class, 'register']);
-Route::post('/login', [\App\Http\Controllers\Api\Auth\AuthController::class, 'login']);
-Route::middleware('auth:sanctum') -> post('/logout', [\App\Http\Controllers\Api\Auth\AuthController::class, 'logout']);
