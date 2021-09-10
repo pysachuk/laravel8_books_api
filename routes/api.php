@@ -23,7 +23,7 @@ Route::post('/login', [\App\Http\Controllers\Api\Auth\AuthController::class, 'lo
 //Not auth routes
 Route::get('/authors', [\App\Http\Controllers\Api\AuthorController::class, 'authors'])
 ->name('api.authors');
-Route::get('/books', [\App\Http\Controllers\Api\BookController::class, 'all'])
+Route::get('/books', [\App\Http\Controllers\Api\BookController::class, 'index'])
     ->name('api.books');
 Route::get('/books/author/{author_id}', [\App\Http\Controllers\Api\AuthorController::class, 'authorBooks'])
     ->name('api.author_books');
@@ -32,13 +32,13 @@ Route::get('/books/author/{author_id}', [\App\Http\Controllers\Api\AuthorControl
 Route::middleware('auth:sanctum') -> group(function(){
     Route::post('/logout', [\App\Http\Controllers\Api\Auth\AuthController::class, 'logout'])
     ->name('api.logout');
-    Route::get('/books/my', [\App\Http\Controllers\Api\BookController::class, 'myBooks'])
+    Route::get('/books/my', [\App\Http\Controllers\Api\BookController::class, 'userBooks'])
         ->name('api.my_books');
-    Route::post('/books/create', [\App\Http\Controllers\Api\BookController::class, 'create'])
+    Route::post('/books/create', [\App\Http\Controllers\Api\BookController::class, 'store'])
         ->name('api.create_book');
     Route::patch('/books/update/{book}', [\App\Http\Controllers\Api\BookController::class, 'update'])
         ->name('api.update_book');
-    Route::delete('/books/delete/{book}', [\App\Http\Controllers\Api\BookController::class, 'delete'])
+    Route::delete('/books/delete/{book}', [\App\Http\Controllers\Api\BookController::class, 'destroy'])
         ->name('api.delete_book');
 });
 
